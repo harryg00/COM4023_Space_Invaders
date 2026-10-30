@@ -12,3 +12,5 @@ Implement collision detection so that invaders are destroyed when successfully s
 and that the player loses a life and respawns (until run out of lives) when shot by an invader.
 - Requirement: The four green barriers should diminish every time they are shot by both the invaders
 and the defender/player.
+
+## Hello :)
