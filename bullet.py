@@ -1,4 +1,6 @@
 import pygame
+import invader
+import defender
 
 BULLET_COLOR = (255, 255, 0)
 SPEED = 5
@@ -23,5 +25,16 @@ class Bullet:
             if bullet.rect.bottom > screen.get_height() or bullet.rect.top < 0:
                 cls.bullets.remove(bullet)
                 break
+
+            if bullet.direction == -1:
+                for i in invader.Invader.invaders:
+                    if bullet.rect.colliderect(i.rect):
+                        Bullet.bullets.remove(self)
+                        invader.Invader.invaders.remove(i)
+                        break
+            else:
+                if bullet.rect.colliderect(defender.rect):
+                    Bullet.bullets.remove(self)
+                    break
 
             pygame.draw.rect(screen, BULLET_COLOR, bullet.rect)
