@@ -1,5 +1,6 @@
 import pygame
 import os
+from bullet import Bullet
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assests")
 
 class Defender:
@@ -14,6 +15,7 @@ class Defender:
                 
     def update(self, screen):
         self.move(screen)
+        self.shoot()
         screen.blit(self.image, self.rect)
 
     def move(self, screen):
@@ -28,9 +30,8 @@ class Defender:
     
 
     def shoot(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    pass #call bullet class
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE] :
+            Bullet(1, self.rect.centerx, self.rect.top)
 
 
