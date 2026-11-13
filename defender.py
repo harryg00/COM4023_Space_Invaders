@@ -3,7 +3,7 @@ import os
 from bullet import Bullet
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assests")
-
+time = 0
 
 class Defender:
     def __init__(self, dis_x, dis_y, speed, lives):
@@ -30,6 +30,10 @@ class Defender:
         self.rect.clamp_ip(screen.get_rect())
 
     def shoot(self):
+        global time
+        time += 1
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            Bullet(-1, self.rect.centerx, self.rect.top)
+            if time > 70:
+                Bullet(-1, self.rect.centerx, self.rect.top)
+                time = 0
