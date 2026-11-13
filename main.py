@@ -11,6 +11,9 @@ from bullet import Bullet
 # changable
 START_LIVES = 3
 PLAYER_SPEED = 5
+INVADER_SPEED = 1
+INVADER_ROW_COUNT = 5
+INVADER_COL_COUNT = 12
 
 # non changable
 DISPLAY_X, DISPLAY_Y = 1000, 750
@@ -32,6 +35,12 @@ bg = pygame.transform.scale(bg, (DISPLAY_X, DISPLAY_Y))
 
 # ---define objects-----------------------------------------------------------------
 defender = Defender(DISPLAY_X, DISPLAY_Y, PLAYER_SPEED, START_LIVES)
+Invader.speed = INVADER_SPEED
+Invader.DISPLAY_X = DISPLAY_X
+Invader.DISPLAY_Y = DISPLAY_Y
+for x in range(INVADER_ROW_COUNT):
+    for y in range(INVADER_COL_COUNT):
+        Invader(x, y, INVADER_ROW_COUNT, INVADER_COL_COUNT)
 
 # ---Functions-------------------------------------------------------------------
 
@@ -50,6 +59,7 @@ while running:
 
     # update objects
     defender.update(screen)
+    Invader.update_all(screen)
     for barrier in Barrier.barriers:
         barrier.update(screen)
     Bullet.updateAll(screen)
