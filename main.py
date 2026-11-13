@@ -4,8 +4,8 @@ import random
 import os
 from defender import Defender
 from invader import Invader
-from barrier import Barrier
 from bullet import Bullet
+import barrier
 
 # ---Defanitions---------------------------------------------------------------------
 # changable
@@ -14,6 +14,7 @@ PLAYER_SPEED = 5
 INVADER_SPEED = 1
 INVADER_ROW_COUNT = 5
 INVADER_COL_COUNT = 12
+NUMBER_OF_BARRIERS = 5
 
 # non changable
 DISPLAY_X, DISPLAY_Y = 1000, 750
@@ -41,6 +42,8 @@ Invader.DISPLAY_Y = DISPLAY_Y
 for x in range(INVADER_ROW_COUNT):
     for y in range(INVADER_COL_COUNT):
         Invader(x, y, INVADER_ROW_COUNT, INVADER_COL_COUNT)
+for b in range(NUMBER_OF_BARRIERS):
+    barrier.Barrier(b, NUMBER_OF_BARRIERS, DISPLAY_X, DISPLAY_Y)
 
 # ---Functions-------------------------------------------------------------------
 
@@ -60,9 +63,9 @@ while running:
     # update objects
     defender.update(screen)
     Invader.update_all(screen)
-    for barrier in Barrier.barriers:
-        barrier.update(screen)
     Bullet.updateAll(screen)
+    for b in barrier.Barrier.barriers:
+        b.update(screen)
 
     # game over
     if game_over_text:
