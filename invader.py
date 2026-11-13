@@ -1,6 +1,6 @@
-import pygame
-import bullet
 import random
+import bullet
+import pygame
 
 INVADER_BITMAPS = [
     [
@@ -75,9 +75,11 @@ class Invader:
     DISPLAY_X, DISPLAY_Y = 1000, 750
     sprites = {}
     speed = 1
+    total_num_invaders = 0
 
     def __init__(self, x, y, max_x, max_y):
         Invader.invaders.append(self)
+        Invader.total_num_invaders += 1
         image_variant = min((x + 1) // 2, len(INVADER_BITMAPS) - 1)
         if image_variant not in self.sprites:
             self.sprites[image_variant] = make_invader_sprite(
@@ -92,6 +94,7 @@ class Invader:
         start_y = 60
 
         self.rect.topleft = (start_x + y * spacing_x, start_y + x * spacing_y)
+        self.float_x = float(self.rect.x)
 
     def shoot(self):
         pass
@@ -99,18 +102,19 @@ class Invader:
     @classmethod
     def update_all(cls, screen):
         ma = 0
-        mi = cls.DISPLAY_Y
+        mi = cls.DISPLAY_X
         for i in cls.invaders:
-            ma = max(i.rect.x, ma)
-            mi = min(i.rect.x, mi)
-        if ma >= cls.DISPLAY_X - 50 or mi <= 0:
+            ma = max(i.rect.right, ma)
+            mi = min(i.rect.left, mi)
+
+        if (ma >= cls.DISPLAY_X - 10 and cls.speed > 0) or (mi <= 10 and cls.speed < 0):
             cls.speed *= -1
             for invader in cls.invaders:
                 invader.rect.y += 10
-            screen.blit(invader.image, invader.rect)
 
         for invader in cls.invaders:
-            invader.rect.x += cls.speed
+            invader.float_x += cls.speed / (len(cls.invaders) / cls.total_num_invaders)
+            invader.rect.x = round(invader.float_x)
             if random.random() < 0.0005:
                 bullet.Bullet(1, invader.rect.centerx, invader.rect.centery)
             screen.blit(invader.image, invader.rect)
