@@ -4,7 +4,7 @@ import random
 import os
 from defender import Defender
 from invader import Invader
-from bullet import Bullet
+import bullet
 import barrier
 
 # ---Defanitions---------------------------------------------------------------------
@@ -36,6 +36,7 @@ bg = pygame.transform.scale(bg, (DISPLAY_X, DISPLAY_Y))
 
 # ---define objects-----------------------------------------------------------------
 defender = Defender(DISPLAY_X, DISPLAY_Y, PLAYER_SPEED, START_LIVES)
+bullet.Bullet.defender = defender
 Invader.speed = INVADER_SPEED
 Invader.DISPLAY_X = DISPLAY_X
 Invader.DISPLAY_Y = DISPLAY_Y
@@ -63,7 +64,7 @@ while running:
     # update objects
     defender.update(screen)
     Invader.update_all(screen)
-    Bullet.updateAll(screen)
+    bullet.Bullet.updateAll(screen)
     for b in barrier.Barrier.barriers:
         b.update(screen)
 
