@@ -1,4 +1,6 @@
 import pygame
+import bullet
+import random
 
 INVADER_BITMAPS = [
     [
@@ -109,4 +111,6 @@ class Invader:
 
         for invader in cls.invaders:
             invader.rect.x += cls.speed
+            if random.random() < 0.0005:
+                bullet.Bullet(1, invader.rect.centerx, invader.rect.centery)
             screen.blit(invader.image, invader.rect)
