@@ -42,3 +42,19 @@ class Barrier:
 
     def update(self, screen):
         self.draw(screen)
+
+    def destroy_radius(self, center_row, center_col, radius):
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if max(abs(row - center_row), abs(col - center_col)) <= radius:
+                    self.grid[row][col] = 0 
+
+    def check_collision(self, bullet_rect):
+        for row in range(self.rows):
+                for col in range(self.cols):
+                    if self.grid[row][col] == 1:
+                        cell_rect = self.get_cell_rect(row, col)
+                        if bullet_rect.colliderect(cell_rect):
+                            self.destroy_radius(row, col, 1)
+                            return True
+        return False

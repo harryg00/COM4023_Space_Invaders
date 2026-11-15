@@ -1,4 +1,5 @@
 import pygame
+import barrier
 import invader
 
 BULLET_COLOR = (255, 255, 0)
@@ -22,6 +23,11 @@ class Bullet:
             if bullet.rect.bottom > screen.get_height() or bullet.rect.top < 0:
                 cls.bullets.remove(bullet)
                 break
+
+            for b in barrier.Barrier.barriers:
+                if b.check_collision(bullet.rect):
+                    cls.bullets.remove(bullet)
+                    break
 
             if bullet.direction == -1:
                 for i in invader.Invader.invaders:
