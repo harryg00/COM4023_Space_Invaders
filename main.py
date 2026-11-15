@@ -14,7 +14,7 @@ PLAYER_SPEED = 5
 INVADER_SPEED = 1
 INVADER_ROW_COUNT = 5
 INVADER_COL_COUNT = 12
-NUMBER_OF_BARRIERS = 5
+NUMBER_OF_BARRIERS = 4
 
 # non changable
 DISPLAY_X, DISPLAY_Y = 1000, 750
@@ -43,7 +43,7 @@ for x in range(INVADER_ROW_COUNT):
     for y in range(INVADER_COL_COUNT):
         Invader(x, y, INVADER_ROW_COUNT, INVADER_COL_COUNT)
 for b in range(NUMBER_OF_BARRIERS):
-    barrier.Barrier(b, NUMBER_OF_BARRIERS, DISPLAY_X, DISPLAY_Y)
+    barrier.Barrier(b * 200 + 170, DISPLAY_Y - 200, 6)
 
 # ---Functions-------------------------------------------------------------------
 
