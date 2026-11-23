@@ -30,6 +30,12 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 36)
 big_font = pygame.font.Font(None, 80)
 
+pygame.mixer.init()
+pygame.mixer.Sound.play(
+    pygame.mixer.Sound(ASSETS + "/sounds/bg.mpeg"), loops=-1
+).set_volume(0.5)
+
+
 # ---Background-----------------------------------------------------------------
 bg = pygame.image.load(ASSETS + "/images/space.png")
 bg = pygame.transform.scale(bg, (DISPLAY_X, DISPLAY_Y))
@@ -45,6 +51,7 @@ for x in range(INVADER_ROW_COUNT):
         Invader(x, y, INVADER_ROW_COUNT, INVADER_COL_COUNT)
 for b in range(NUMBER_OF_BARRIERS):
     barrier.Barrier(b, NUMBER_OF_BARRIERS, DISPLAY_X, DISPLAY_Y)
+bullet.Bullet.DISPLAY_X = DISPLAY_X
 
 # ---Functions-------------------------------------------------------------------
 
@@ -76,4 +83,5 @@ while running:
 
     clock.tick(60)  # limits FPS to 60
 
+pygame.mixer.quit()
 pygame.quit()
