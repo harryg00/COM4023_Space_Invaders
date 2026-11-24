@@ -51,6 +51,9 @@ class Bullet:
             else:
                 if bullet.rect.colliderect(cls.defender.rect):
                     Bullet.bullets.remove(bullet)
+                    pygame.mixer.Sound.play(
+                        pygame.mixer.Sound(ASSETS + "/sounds/playerDeath.wav")
+                    ).set_volume(0.5)
                     break
 
             pygame.draw.rect(screen, BULLET_COLOR, bullet.rect)

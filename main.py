@@ -43,6 +43,7 @@ bg = pygame.transform.scale(bg, (DISPLAY_X, DISPLAY_Y))
 # ---define objects-----------------------------------------------------------------
 defender = Defender(DISPLAY_X, DISPLAY_Y, PLAYER_SPEED, START_LIVES)
 bullet.Bullet.defender = defender
+bullet.Bullet.DISPLAY_X = DISPLAY_X
 Invader.speed = INVADER_SPEED
 Invader.DISPLAY_X = DISPLAY_X
 Invader.DISPLAY_Y = DISPLAY_Y
