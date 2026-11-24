@@ -30,6 +30,12 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 36)
 big_font = pygame.font.Font(None, 80)
 
+pygame.mixer.init()
+pygame.mixer.Sound.play(
+    pygame.mixer.Sound(ASSETS + "/sounds/bg.mpeg"), loops=-1
+).set_volume(0.5)
+
+
 # ---Background-----------------------------------------------------------------
 bg = pygame.image.load(ASSETS + "/images/space.png")
 bg = pygame.transform.scale(bg, (DISPLAY_X, DISPLAY_Y))
@@ -76,4 +82,5 @@ while running:
 
     clock.tick(60)  # limits FPS to 60
 
+pygame.mixer.quit()
 pygame.quit()
