@@ -18,6 +18,10 @@ class Bullet:
     defender = None
     DISPLAY_X = None
 
+    @classmethod
+    def has_defender_bullet(cls):
+        return any(bullet.direction == -1 for bullet in cls.bullets)
+
     def __init__(self, direction, centerx, y):
         Bullet.bullets.append(self)
         self.direction = direction
