@@ -2,6 +2,9 @@
 import pygame
 import random
 import os
+
+pygame.mixer.init()
+
 from defender import Defender
 from invader import Invader
 import bullet
@@ -30,10 +33,9 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 36)
 big_font = pygame.font.Font(None, 80)
 
-pygame.mixer.init()
-pygame.mixer.Sound.play(
-    pygame.mixer.Sound(ASSETS + "/sounds/bg.mpeg"), loops=-1
-).set_volume(0.5)
+background_sound = pygame.mixer.Sound(ASSETS + "/sounds/bg.mpeg")
+background_sound.set_volume(0.5)
+background_sound.play(loops=-1)
 
 
 # ---Background-----------------------------------------------------------------

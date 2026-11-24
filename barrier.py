@@ -2,6 +2,8 @@ import pygame
 import os
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assests")
+BARRIER_HIT_SOUND = pygame.mixer.Sound(ASSETS + "/sounds/barrierHit.mp3")
+BARRIER_HIT_SOUND.set_volume(0.2)
 
 
 class Barrier:
@@ -60,8 +62,6 @@ class Barrier:
                     cell_rect = self.get_cell_rect(row, col)
                     if bullet_rect.colliderect(cell_rect):
                         self.destroy_radius(row, col, 1)
-                        pygame.mixer.Sound.play(
-                            pygame.mixer.Sound(ASSETS + "/sounds/barrierHit.mp3")
-                        ).set_volume(0.2)
+                        BARRIER_HIT_SOUND.play()
                         return True
         return False
