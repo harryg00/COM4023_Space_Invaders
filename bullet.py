@@ -1,4 +1,5 @@
 import pygame
+import math
 import barrier
 import invader
 import os
@@ -6,11 +7,13 @@ import os
 BULLET_COLOR = (255, 255, 0)
 SPEED = 5
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assests")
+SHOOT_VOLUME = 0.30
+
 SHOOT_SOUND = pygame.mixer.Sound(ASSETS + "/sounds/shoot.wav")
 INVADER_DEATH_SOUND = pygame.mixer.Sound(ASSETS + "/sounds/invaderDeath.wav")
-INVADER_DEATH_SOUND.set_volume(0.5)
+INVADER_DEATH_SOUND.set_volume(0.40)
 PLAYER_DEATH_SOUND = pygame.mixer.Sound(ASSETS + "/sounds/playerDeath.wav")
-PLAYER_DEATH_SOUND.set_volume(0.5)
+PLAYER_DEATH_SOUND.set_volume(0.50)
 
 
 class Bullet:
@@ -28,12 +31,16 @@ class Bullet:
         self.rect = pygame.Rect(0, 0, 5, 5)
         self.rect.center = (centerx, y)
 
+        self.play_shoot_sound()
+
+    def play_shoot_sound(self):
         pan = max(0.0, min(1.0, self.rect.centerx / Bullet.DISPLAY_X))
-        left_volume = 1.0 - pan
-        right_volume = pan
+        left_volume = math.cos(pan * math.pi / 2)
+        right_volume = math.sin(pan * math.pi / 2)
+
         channel = SHOOT_SOUND.play()
         if channel is not None:
-            channel.set_volume(left_volume * 0.1, right_volume * 0.1)
+            channel.set_volume(left_volume * SHOOT_VOLUME, right_volume * SHOOT_VOLUME)
 
     @classmethod
     def updateAll(cls, screen):
