@@ -4,6 +4,23 @@
 
 Space Invaders codebase in Python and Pygame for `COM4023-PR1`.
 
+## Setup and Testing
+
+Install the game and test dependencies with:
+
+```sh
+python -m pip install -r requirements.txt
+```
+
+Run the game and unit tests with:
+
+```sh
+python main.py
+python -m pytest -v tests
+```
+
+The test suite also runs in GitHub Actions on pushes and pull requests.
+
 ## Resources
 
 ### Assets
@@ -26,8 +43,8 @@ Space Invaders codebase in Python and Pygame for `COM4023-PR1`.
 ## Project Requirements
 
 - **Invaders:** The full invaders array must include three types of aliens. They
-  should move from side to side, fire at the player at random, and increase
-  their movement speed as their numbers are reduced.
+  should animate between two poses, move from side to side, fire at the player
+  at random, and increase their movement speed as their numbers are reduced.
 - **Defender (Player):** The player must be able to shoot multiple bullets
   continuously. Collision detection should destroy invaders when hit by the
   player, and cause the player to lose a life and respawn (until out of lives)
@@ -41,6 +58,7 @@ Space Invaders codebase in Python and Pygame for `COM4023-PR1`.
 
 ### `Barrier`
 
+- `__init__()`
 - `get_cell_rect()`
 - `draw()`
 - `update()`
@@ -49,17 +67,26 @@ Space Invaders codebase in Python and Pygame for `COM4023-PR1`.
 
 ### `Bullet`
 
+- `__init__()`
+- `has_defender_bullet()` — [**Class Method**](#class-method)
+- `play_shoot_sound()`
 - `updateAll()` — [**Class Method**](#class-method)
 
 ### `Defender`
 
+- `__init__()`
 - `update()`
 - `move()`
 - `shoot()`
 
 ### `Invader`
 
-- `updateAll()` — [**Class Method**](#class-method)
+- `__init__()`
+- `current_speed()` — [**Class Method**](#class-method)
+- `update_all()` — [**Class Method**](#class-method)
+- `_update_animation()` — [**Private Method**](#private-method)
+- `_handle_edge()` — [**Private Method**](#private-method)
+- `_update_invaders()` — [**Private Method**](#private-method)
 
 ---
 
@@ -69,3 +96,9 @@ Space Invaders codebase in Python and Pygame for `COM4023-PR1`.
 
 A class method is a method bound to the class itself rather than any specific
 object instance.
+
+### Private Method
+
+A leading underscore marks a method as an internal method. Python does not
+enforce private access, so these methods can still be accessed from outside the
+class.
