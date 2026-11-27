@@ -3,6 +3,7 @@ import pygame
 import random
 import os
 
+pygame.mixer.pre_init(44100, -16, 2, 1024)
 pygame.mixer.init()
 
 from defender import Defender
@@ -26,17 +27,19 @@ ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assests")
 game_over_text = None
 running = True
 
-# ---pygame setup--------------------------------------------------------------------
+# ---pygame setup------------------------------------------------------------------
 pygame.init()
+pygame.mixer.set_num_channels(16)
+
+MUSIC_VOLUME = 0.20
+pygame.mixer.music.load(ASSETS + "/sounds/bg.mpeg")
+pygame.mixer.music.set_volume(MUSIC_VOLUME)
+pygame.mixer.music.play(loops=-1)
+
 screen = pygame.display.set_mode((DISPLAY_X, DISPLAY_Y))
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 36)
 big_font = pygame.font.Font(None, 80)
-
-background_sound = pygame.mixer.Sound(ASSETS + "/sounds/bg.mpeg")
-background_sound.set_volume(0.5)
-background_sound.play(loops=-1)
-
 
 # ---Background-----------------------------------------------------------------
 bg = pygame.image.load(ASSETS + "/images/space.png")
@@ -85,5 +88,6 @@ while running:
 
     clock.tick(60)  # limits FPS to 60
 
+pygame.mixer.music.stop()
 pygame.mixer.quit()
 pygame.quit()

@@ -2,8 +2,9 @@ import pygame
 import os
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assests")
-BARRIER_HIT_SOUND = pygame.mixer.Sound(ASSETS + "/sounds/barrierHit.mp3")
-BARRIER_HIT_SOUND.set_volume(0.2)
+
+BARRIER_HIT_SOUND = pygame.mixer.Sound(ASSETS + "/sounds/barrierHit.wav")
+BARRIER_HIT_SOUND.set_volume(0.25)
 
 
 class Barrier:

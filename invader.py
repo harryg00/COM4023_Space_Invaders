@@ -74,7 +74,12 @@ class Invader:
     invaders = []
     DISPLAY_X, DISPLAY_Y = 1000, 750
     sprites = {}
-    speed = 1
+    speed = 1  # pixels per frame
+    MAX_SPEED_MULTIPLIER = 5
+    SPEED_CURVE = 2.0
+    EDGE_MARGIN = 10
+    DROP_DISTANCE = 10
+    direction = 1  # 1 moves right, -1 moves left
     total_num_invaders = 0
 
     def __init__(self, x, y, max_x, max_y):
@@ -100,6 +105,19 @@ class Invader:
         pass
 
     @classmethod
+    def current_speed(cls):
+        remaining = len(cls.invaders)
+        if remaining <= 0 or cls.total_num_invaders <= 0:
+            return 0.0
+
+        kills = cls.total_num_invaders - remaining
+        progress = kills / max(cls.total_num_invaders - 1, 1)
+        progress = min(max(progress, 0.0), 1.0)
+
+        multiplier = 1 + (cls.MAX_SPEED_MULTIPLIER - 1) * progress**cls.SPEED_CURVE
+        return cls.speed * multiplier
+
+    @classmethod
     def update_all(cls, screen):
         ma = 0
         mi = cls.DISPLAY_X
@@ -107,13 +125,16 @@ class Invader:
             ma = max(i.rect.right, ma)
             mi = min(i.rect.left, mi)
 
-        if (ma >= cls.DISPLAY_X - 10 and cls.speed > 0) or (mi <= 10 and cls.speed < 0):
-            cls.speed *= -1
+        at_right_edge = ma >= cls.DISPLAY_X - cls.EDGE_MARGIN and cls.direction > 0
+        at_left_edge = mi <= cls.EDGE_MARGIN and cls.direction < 0
+        if at_right_edge or at_left_edge:
+            cls.direction *= -1
             for invader in cls.invaders:
-                invader.rect.y += 10
+                invader.rect.y += cls.DROP_DISTANCE
 
+        step = cls.current_speed() * cls.direction
         for invader in cls.invaders:
-            invader.float_x += cls.speed / (len(cls.invaders) / cls.total_num_invaders)
+            invader.float_x += step
             invader.rect.x = round(invader.float_x)
             if random.random() < 0.0005:
                 bullet.Bullet(1, invader.rect.centerx, invader.rect.centery)
