@@ -175,25 +175,35 @@ class Invader:
 
     @classmethod
     def update_all(cls, screen: pygame.Surface) -> None:
+        cls._update_animation()
+        cls._handle_edge()
+        cls._update_invaders(screen)
+
+    @classmethod
+    def _update_animation(cls) -> None:
         now = pygame.time.get_ticks()
         if now - cls.last_animation_update >= cls.ANIMATION_INTERVAL_MS:
             cls.animation_frame = 1 - cls.animation_frame
             cls.last_animation_update = now
 
-        if cls.invaders:
-            rightmost_edge = max(invader.rect.right for invader in cls.invaders)
-            leftmost_edge = min(invader.rect.left for invader in cls.invaders)
-            reached_edge = (
-                cls.direction > 0 and rightmost_edge >= cls.DISPLAY_X - cls.EDGE_MARGIN
-            ) or (cls.direction < 0 and leftmost_edge <= cls.EDGE_MARGIN)
-        else:
-            reached_edge = False
+    @classmethod
+    def _handle_edge(cls) -> None:
+        if not cls.invaders:
+            return
+
+        rightmost_edge = max(invader.rect.right for invader in cls.invaders)
+        leftmost_edge = min(invader.rect.left for invader in cls.invaders)
+        reached_edge = (
+            cls.direction > 0 and rightmost_edge >= cls.DISPLAY_X - cls.EDGE_MARGIN
+        ) or (cls.direction < 0 and leftmost_edge <= cls.EDGE_MARGIN)
 
         if reached_edge:
             cls.direction *= -1
             for invader in cls.invaders:
                 invader.rect.y += cls.DROP_DISTANCE
 
+    @classmethod
+    def _update_invaders(cls, screen: pygame.Surface) -> None:
         step = cls.current_speed() * cls.direction
         for invader in cls.invaders:
             invader.float_x += step
