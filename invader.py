@@ -1,3 +1,5 @@
+"""Invader sprites and formation movement for the game."""
+
 import random
 
 import pygame
@@ -102,6 +104,7 @@ INVADER_SHOOT_CHANCE = 0.0005
 
 
 def make_invader_sprite(bitmap: list[str]) -> pygame.Surface:
+    """Build a transparent/alpha Pygame surface from a pixel bitmap."""
     image = pygame.Surface(
         (len(bitmap[0]) * INVADER_PIXEL_SIZE, len(bitmap) * INVADER_PIXEL_SIZE),
         pygame.SRCALPHA,
@@ -138,6 +141,7 @@ class Invader:
     last_animation_update = 0
 
     def __init__(self, row: int, column: int, column_count: int) -> None:
+        """Create an invader positioned in the formation's given row and column."""
         Invader.invaders.append(self)
         Invader.total_num_invaders += 1
         variant = min((row + 1) // 2, len(INVADER_BITMAPS) - 1)
@@ -162,6 +166,7 @@ class Invader:
 
     @classmethod
     def current_speed(cls) -> float:
+        """Return the speed that is scaled by the number of alive/dead invaders."""
         remaining = len(cls.invaders)
         if remaining <= 0 or cls.total_num_invaders <= 0:
             return 0.0
@@ -175,12 +180,14 @@ class Invader:
 
     @classmethod
     def update_all(cls, screen: pygame.Surface) -> None:
+        """Updates all invaders by changing the animation state, moving and draw all of them."""
         cls._update_animation()
         cls._handle_edge()
         cls._update_invaders(screen)
 
     @classmethod
     def _update_animation(cls) -> None:
+        """Advance the animation frame when its time elapses."""
         now = pygame.time.get_ticks()
         if now - cls.last_animation_update >= cls.ANIMATION_INTERVAL_MS:
             cls.animation_frame = 1 - cls.animation_frame
@@ -188,6 +195,7 @@ class Invader:
 
     @classmethod
     def _handle_edge(cls) -> None:
+        """Reverse and drop the formation when it reaches a screen edge."""
         if not cls.invaders:
             return
 
@@ -204,6 +212,7 @@ class Invader:
 
     @classmethod
     def _update_invaders(cls, screen: pygame.Surface) -> None:
+        """Move, shoot, animate, and draw each remaining invader."""
         step = cls.current_speed() * cls.direction
         for invader in cls.invaders:
             invader.float_x += step
