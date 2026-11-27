@@ -1,6 +1,8 @@
 import random
-import bullet
+
 import pygame
+
+import bullet
 
 INVADER_BITMAPS = [
     [
@@ -47,9 +49,11 @@ INVADER_BITMAPS = [
     ],
 ]
 INVADER_PIXEL_SIZE = 2
+INVADER_COLOR = (255, 255, 255)
+INVADER_SHOOT_CHANCE = 0.0005
 
 
-def make_invader_sprite(bitmap):
+def make_invader_sprite(bitmap: list[str]) -> pygame.Surface:
     image = pygame.Surface(
         (len(bitmap[0]) * INVADER_PIXEL_SIZE, len(bitmap) * INVADER_PIXEL_SIZE),
         pygame.SRCALPHA,
@@ -59,7 +63,7 @@ def make_invader_sprite(bitmap):
             if pixel == "1":
                 pygame.draw.rect(
                     image,
-                    (255, 255, 255),
+                    INVADER_COLOR,
                     (
                         column_index * INVADER_PIXEL_SIZE,
                         row_index * INVADER_PIXEL_SIZE,
@@ -82,30 +86,28 @@ class Invader:
     direction = 1  # 1 moves right, -1 moves left
     total_num_invaders = 0
 
-    def __init__(self, x, y, max_x, max_y):
+    def __init__(self, row: int, column: int, column_count: int) -> None:
         Invader.invaders.append(self)
         Invader.total_num_invaders += 1
-        image_variant = min((x + 1) // 2, len(INVADER_BITMAPS) - 1)
-        if image_variant not in self.sprites:
-            self.sprites[image_variant] = make_invader_sprite(
-                INVADER_BITMAPS[image_variant]
-            )
-        self.image = self.sprites[image_variant]
+        variant = min((row + 1) // 2, len(INVADER_BITMAPS) - 1)
+        if variant not in self.sprites:
+            self.sprites[variant] = make_invader_sprite(INVADER_BITMAPS[variant])
+        self.image = self.sprites[variant]
         self.rect = self.image.get_rect()
 
-        spacing_x = self.image.get_width() + 15
-        spacing_y = self.image.get_height() + 10
-        start_x = (self.DISPLAY_X - (max_y * spacing_x - 25)) // 2
+        column_spacing = self.image.get_width() + 15
+        row_spacing = self.image.get_height() + 10
+        start_x = (self.DISPLAY_X - (column_count * column_spacing - 25)) // 2
         start_y = 60
 
-        self.rect.topleft = (start_x + y * spacing_x, start_y + x * spacing_y)
+        self.rect.topleft = (
+            start_x + column * column_spacing,
+            start_y + row * row_spacing,
+        )
         self.float_x = float(self.rect.x)
 
-    def shoot(self):
-        pass
-
     @classmethod
-    def current_speed(cls):
+    def current_speed(cls) -> float:
         remaining = len(cls.invaders)
         if remaining <= 0 or cls.total_num_invaders <= 0:
             return 0.0
@@ -118,16 +120,17 @@ class Invader:
         return cls.speed * multiplier
 
     @classmethod
-    def update_all(cls, screen):
-        ma = 0
-        mi = cls.DISPLAY_X
-        for i in cls.invaders:
-            ma = max(i.rect.right, ma)
-            mi = min(i.rect.left, mi)
+    def update_all(cls, screen: pygame.Surface) -> None:
+        if cls.invaders:
+            rightmost_edge = max(invader.rect.right for invader in cls.invaders)
+            leftmost_edge = min(invader.rect.left for invader in cls.invaders)
+            reached_edge = (
+                cls.direction > 0 and rightmost_edge >= cls.DISPLAY_X - cls.EDGE_MARGIN
+            ) or (cls.direction < 0 and leftmost_edge <= cls.EDGE_MARGIN)
+        else:
+            reached_edge = False
 
-        at_right_edge = ma >= cls.DISPLAY_X - cls.EDGE_MARGIN and cls.direction > 0
-        at_left_edge = mi <= cls.EDGE_MARGIN and cls.direction < 0
-        if at_right_edge or at_left_edge:
+        if reached_edge:
             cls.direction *= -1
             for invader in cls.invaders:
                 invader.rect.y += cls.DROP_DISTANCE
@@ -136,6 +139,6 @@ class Invader:
         for invader in cls.invaders:
             invader.float_x += step
             invader.rect.x = round(invader.float_x)
-            if random.random() < 0.0005:
+            if random.random() < INVADER_SHOOT_CHANCE:
                 bullet.Bullet(1, invader.rect.centerx, invader.rect.centery)
             screen.blit(invader.image, invader.rect)

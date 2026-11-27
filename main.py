@@ -54,7 +54,7 @@ Invader.DISPLAY_X = DISPLAY_X
 Invader.DISPLAY_Y = DISPLAY_Y
 for x in range(INVADER_ROW_COUNT):
     for y in range(INVADER_COL_COUNT):
-        Invader(x, y, INVADER_ROW_COUNT, INVADER_COL_COUNT)
+        Invader(x, y, INVADER_COL_COUNT)
 for b in range(NUMBER_OF_BARRIERS):
     barrier.Barrier(b * 200 + 170, DISPLAY_Y - 200, 6)
 
